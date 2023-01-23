@@ -232,6 +232,7 @@
             <h3 class="ui center aligned header" style="margin-top: 2%; color: white">Other Hacks</h3>
             <div class="ui divider"></div>
             <div class="ui input" style="background-color: #444444; border: none">
+            <div class="ui input" style="background-color: #444444; border: none">
                 <div class="ui bottom attached label" style="text-align: center">Dark Tower Floor</div>
                 <input id="darkTowerSelector" type="number" min="0" max="100"
                     oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null"
@@ -254,13 +255,14 @@
             window.open(window.location.protocol + '//' + window.location.host + '/about.html').focus();
         }">About
         </div>
-        <a class="ui teal button" style="position: fixed; bottom: 10px; left: 98px;" href="https://github.com/fastkdid/ProdigyDashboard-ha" target="_blank">Github</a>
+        <div class="ui teal button" style="position: fixed; bottom: 10px; left: 98px;" onclick="window.open('https://github.com/hostedposted/Prodigy/tree/dashboard')">Github
+        </div>
+        <a class="ui teal button" style="position: fixed; bottom: 10px; left: 98px;" href="https://github.com/ProdigyAPI/ProdigyDashboard" target="_blank">Github</a>
         <div class="ui teal button" id="save" style="position: fixed; bottom: 10px; right: 10px;" onclick="save()">Save
         </div>
         <div class="ui teal button" id="logout" style="position: fixed; bottom: 10px; right: 90px; " onclick="logout()">
             Logout</div>
         </span>
 </body>
-
 </html>
  
