@@ -4,7 +4,6 @@
 const defaults = []
 const hacks = []
 let saveErrors = false
-
 function setCookie (name, value, days) {
     let expires = ""
     if (days) {
@@ -27,7 +26,6 @@ function getCookie (name) {
 function eraseCookie (name) {
     document.cookie = name + "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;"
 }
-
 class Hack {
     /**
      * @param {string} id Id of the hack
@@ -40,7 +38,6 @@ class Hack {
         }
         this.name = name
     }
-
     /**
      * @param {(playerData: {}, value: string | number, index?: number | undefined) => {}} func Function to change playerData
     */
@@ -94,7 +91,6 @@ class Hack {
         })
         return this
     }
-
     /**
      * @param {(playerData: {}, element: HTMLElement, index?: number | undefined) => {}} func Function to change playerData
     */
@@ -114,7 +110,6 @@ class Hack {
         return this
     }
 }
-
 async function init () {
     try {
         window.gamedata = await getGameData()
@@ -136,7 +131,6 @@ async function init () {
         }).load_default((playerData, element) => {
             element.value = playerData.data.level
         })
-
         new Hack("goldSelector", "gold").save((playerData, value) => {
             playerData.data.gold = parseInt(value) || 0
         }).load_default((playerData, element) => {
@@ -147,39 +141,33 @@ async function init () {
         }).load_default((playerData, element) => {
             element.value = playerData.data.grade
         })
-
         new Hack("darkTowerSelector", "Dark Tower").save((playerData, value) => {
             playerData.data.tower = parseInt(value) || 0
         }).load_default((playerData, element) => {
             element.value = playerData.data.tower
         })
-
         new Hack("bountyPointsSelector", "bounty points").save((playerData, value) => {
             playerData.data.bountyScore = parseInt(value) || 0
         }).load_default((playerData, element) => {
             element.value = playerData.data.bountyScore || 0
         })
-
         new Hack("firstNameSelector", "name").save((playerData, value) => {
             playerData.appearance.name.first = value + 1
         }).load_default((playerData, element) => {
             element.selectedIndex = Array.from(element.options).map(elem => elem.innerHTML).indexOf(window.gamedata.name[playerData.appearance.name.first - 1].data.value)
         })
-
         new Hack("middleNameSelector", "middle name").save((playerData, value) => {
             const middleNames = window.gamedata.name.filter(name => name.data.type === 1)
             playerData.appearance.name.middle = middleNames[value].ID
         }).load_default((playerData, element) => {
             element.selectedIndex = Array.from(element.options).map(elem => elem.innerHTML).indexOf(window.gamedata.name[playerData.appearance.name.middle - 1].data.value)
         })
-
         new Hack("lastNameSelector", "last name").save((playerData, value) => {
             const lastNames = window.gamedata.name.filter(name => name.data.type === 2)
             playerData.appearance.name.last = lastNames[value].ID
         }).load_default((playerData, element) => {
             element.selectedIndex = Array.from(element.options).map(elem => elem.innerHTML).indexOf(window.gamedata.name[playerData.appearance.name.last - 1].data.value)
         })
-
         new Hack("nickNameSelector", "nick name").save((playerData, value) => {
             playerData.appearance.name.nick = value + 1
         }).load_default((playerData, element) => {
@@ -189,21 +177,18 @@ async function init () {
                 element.selectedIndex = element.options.length - 1
             }
         })
-
         new Hack("faceSelector", "face").save((playerData, value) => {
             const faces = window.gamedata.face
             playerData.appearance.face = faces[value].ID
         }).load_default((playerData, element) => {
             element.selectedIndex = Array.from(element.options).map(elem => elem.innerHTML).indexOf(window.gamedata.face[playerData.appearance.face - 1].data.name)
         })
-
         new Hack("hairColorSelector", "hairColor").save((playerData, value) => {
             const hairColors = window.gamedata.hairColor
             playerData.appearance.hair.color = hairColors[value].ID
         }).load_default((playerData, element) => {
             element.selectedIndex = Array.from(element.options).map(elem => elem.innerHTML).indexOf(window.gamedata.hairColor[playerData.appearance.hair.color - 1].data.name)
         })
-
         new Hack("currencyTableBody", "currency").save((playerData, value, index) => {
             const currencies = [...window.gamedata.currency]
             currencies.shift()
@@ -236,11 +221,9 @@ async function init () {
             element.value = currencies[0].N
             return playerData
         })
-
         document.getElementById("editPetSelector").onchange = function () {
             document.getElementById("editPetLevel").value = playerData.pets[this.selectedIndex].level
         }
-
         await load_defaults()
     } catch (e) {
         console.log(e)
@@ -251,7 +234,6 @@ async function init () {
         window.location.href = "/login"
     }
 }
-
 async function load_defaults () {
     // Check for account state
     if (playerData.data === null) {
@@ -265,18 +247,14 @@ async function load_defaults () {
         window.location.href = "/login"
         return
     }
-
     defaults.forEach(func => {
         func(playerData)
     })
-
     // Finishing
     document.getElementById("loading").style.display = "none"
     document.getElementById("dashboard").style.display = "block"
-
     document.getElementById("petSelector").selectedIndex = "Peeko"
 }
-
 async function tokenify (username, password) {
     const response = await fetch(
         "https://prodigy-api.hostedposted.com/token/",
@@ -299,7 +277,6 @@ async function tokenify (username, password) {
     if (data.startsWith("Internal")) return false
     return JSON.parse(data)
 }
-
 async function load_names () {
     const firstNameSelector = document.getElementById("firstNameSelector")
     const firstNames = window.gamedata.name
@@ -346,6 +323,7 @@ async function load_names () {
     for (let i = 0; i < playerPets?.length; i++) {
         const option = document.createElement("option")
         option.value = i
+        option.innerHTML = window.gamedata.pet.filter(e => e.ID === playerPets[i].ID)[0].data.name
         option.innerHTML = window.gamedata.pet.filter(e => e.ID === parseInt(playerPets[i].ID))[0].data.name
         editPetSelector.appendChild(option)
     }
@@ -371,7 +349,6 @@ async function load_names () {
     option.innerHTML = "None"
     nickNameSelector.appendChild(option)
 }
-
 async function load_currency () {
     const currencyTableBody = document.getElementById("currencyTableBody")
     const currencies = gamedata.currency
@@ -395,7 +372,6 @@ async function load_currency () {
         rowDiv.appendChild(rowInput)
     }
 }
-
 async function save () {
     const saveButton = document.getElementById("save")
     saveButton.className = "ui teal loading button"
@@ -406,7 +382,6 @@ async function save () {
         }
     })
     const playerData = await playerRequest.json()
-
     hacks.forEach(hack => {
         try {
             hack(playerData)
@@ -415,7 +390,6 @@ async function save () {
             saveErrors = true
         }
     })
-
     if (saveErrors === true) {
         saveErrors = false
         saveButton.className = "ui teal button"
@@ -437,13 +411,11 @@ async function save () {
     popup("Success!", "Your changes have been saved!", "success")
     saveButton.className = "ui teal button"
 }
-
 function logout () {
     eraseCookie("username")
     eraseCookie("password")
     window.location.href = "/login"
 }
-
 async function getGameData () {
     const gameDataFetch = await fetch(
         "https://prodigy-api.hostedposted.com/gameData",
@@ -497,7 +469,6 @@ async function addPet () {
     popup("Success!", "Added the pet!", "success")
     addButton.className = "ui teal button"
 }
-
 async function getAllPets () {
     const value = document.getElementById("petSelector").value
     if (!document.getElementById("petLevel").value) return popup("Pet Error", "You must set a level for these pets!", "error")
@@ -543,7 +514,6 @@ async function getAllPets () {
     popup("Success!", "Got all pets!", "success")
     addButton.className = "ui teal button"
 }
-
 async function editPet () {
     const editButton = document.getElementById("editPetsSave")
     editButton.className = "ui teal loading button"
@@ -578,7 +548,6 @@ async function editPet () {
     popup("Success!", "Edited the pet!", "success")
     editButton.className = "ui teal button"
 }
-
 function setAllCurrencies () {
     const setCurrencyInput = document.getElementById("setCurrencyInput")
     const currencyTableBody = document.getElementById("currencyTableBody")
@@ -591,7 +560,6 @@ function setAllCurrencies () {
         currencyTableInputs[i].value = setCurrencyInput.value
     }
 }
-
 async function getAllItems () {
     if (!document.getElementById("inventoryNumSelector").value) return popup("Inventory Error", "You must specify how many of each item you want!", "error")
     const addButton = document.getElementById("getAllItems")
@@ -604,7 +572,6 @@ async function getAllItems () {
     })
     const playerData = await playerRequest.json()
     const ids = ["boots", "follow", "fossil", "hat", "item", "key", "mathTownFrame", "mathTownInterior", "mount", "outfit", "spellRelic", "weapon"]
-
     ids.forEach(id => {
         playerData.inventory[id] = itemify(gamedata[id], document.getElementById("inventoryNumSelector").value)
     })
@@ -629,17 +596,14 @@ async function getAllItems () {
     popup("Success!", "Set all items!", "success")
     addButton.className = "ui teal button"
 }
-
 function popup (title, desc, status) {
     Swal.fire(title, desc, status)
 }
-
 const itemify = (item, amount) =>
     item.map(x => ({
         ID: x.ID,
         N: amount
     })).filter(v => v !== undefined)
-
 if (!window.location.href.includes("login")) {
     if (
         getCookie("username") === null ||
